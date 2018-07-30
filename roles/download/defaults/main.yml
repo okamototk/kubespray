@@ -44,13 +44,17 @@ contiv_version: 1.1.7
 cilium_version: "v1.0.0-rc8"
 
 # Download URLs
+etcd_download_url: "https://github.com/coreos/etcd/releases/download/{{ etcd_version }}/etcd-{{ etcd_version }}-linux-amd64.tar.gz"
+hyperkube_download_url: "https://storage.googleapis.com/kubernetes-release/release/{{ kube_version }}/bin/linux/amd64/hyperkube"
 istioctl_download_url: "https://storage.googleapis.com/istio-release/releases/{{ istio_version }}/istioctl/istioctl-linux"
 kubeadm_download_url: "https://storage.googleapis.com/kubernetes-release/release/{{ kubeadm_version }}/bin/linux/amd64/kubeadm"
 vault_download_url: "https://releases.hashicorp.com/vault/{{ vault_version }}/vault_{{ vault_version }}_linux_amd64.zip"
 
 # Checksums
+etcd_checksum: 7b95bdc6dfd1d805f650ea8f886fdae6e7322f886a8e9d1b0d14603767d053b1
+hyperkube_checksum: 019ce1ecf4c6a70c06a7f4ef107443351458b4d9e6b9ce4a436bfbfbef93feea
 istioctl_checksum: fd703063c540b8c0ab943f478c05ab257d88ae27224c746a27d0526ddbf7c370
-kubeadm_checksum: 7e1169bbbeed973ab402941672dec957638dea5952a1e8bc89a37d5e709cc4b4
+kubeadm_checksum: 425ec24b95f7217ee06d1588aba22f206a5829f8c6a5352c2862368552361fe6
 vault_binary_checksum: 3c4d70ba71619a43229e65c67830e30e050eab7a81ac6b28325ff707e5914188
 
 # Containers
@@ -189,6 +193,19 @@ downloads:
     sha256: "{{ etcd_digest_checksum|default(None) }}"
     groups:
       - etcd
+  etcd_file:
+    enabled: true
+    file: true
+    version: "{{ etcd_version }}"
+    dest: "etcd-{{ etcd_version }}-linux-amd64.tar.gz"
+    sha256: "{{ etcd_checksum }}"
+    source_url: "{{ etcd_download_url }}"
+    url: "{{ etcd_download_url }}"
+    unarchive: true
+    owner: "root"
+    mode: "0755"
+    groups:
+      - etcd
   kubeadm:
     enabled: "{{ kubeadm_enabled }}"
     file: true
@@ -285,6 +302,19 @@ downloads:
     repo: "{{ hyperkube_image_repo }}"
     tag: "{{ hyperkube_image_tag }}"
     sha256: "{{ hyperkube_digest_checksum|default(None) }}"
+    groups:
+      - k8s-cluster
+  hyperkube_file:
+    enabled: true
+    file: true
+    version: "{{ kube_version }}"
+    dest: "hyperkube"
+    sha256: "{{ hyperkube_checksum }}"
+    source_url: "{{ hyperkube_download_url }}"
+    url: "{{ hyperkube_download_url }}"
+    unarchive: false
+    owner: "root"
+    mode: "0755"
     groups:
       - k8s-cluster
   cilium:
