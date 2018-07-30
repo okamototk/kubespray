@@ -27,9 +27,9 @@ download_always_pull: False
 download_delegate: "{% if download_localhost %}localhost{% else %}{{groups['kube-master'][0]}}{% endif %}"
 
 # Versions
-kube_version: v1.10.4
+kube_version: v1.11.1
 kubeadm_version: "{{ kube_version }}"
-etcd_version: v3.2.18
+etcd_version: v3.3.9
 # TODO(mattymo): Move calico versions to roles/network_plugins/calico/defaults
 # after migration to container download
 calico_version: "v2.6.8"
