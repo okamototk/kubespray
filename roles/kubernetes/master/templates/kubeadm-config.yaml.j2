@@ -96,3 +96,7 @@ unifiedControlPlaneImage: "{{ hyperkube_image_repo }}:{{ hyperkube_image_tag }}"
 {% if kube_override_hostname|default('') %}
 nodeName: {{ kube_override_hostname }}
 {% endif %}
+{% if manage_crio %}
+nodeRegistration:
+  criSocket: /var/run/crio/crio.sock
+{% endif %}
