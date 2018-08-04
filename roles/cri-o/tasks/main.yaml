@@ -1,0 +1,27 @@
+- name: Add OpenShifr Origin repository
+  yum_repository:
+    name: origin
+    description: OpenShift Origin Repo
+    baseurl: "{{ crio_rhel_repo_base_url }}"
+    gpgcheck: no
+  when:
+    - ansible_os_family == 'RedHat'
+
+- name: Install cri-o
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - cri-o
+  - cri-tools
+
+- name: Install cri-o config
+  copy:
+    src: crio.conf
+    dest: /etc/crio/crio.conf
+
+- name: Install cri-o service
+  service:
+    name: crio
+    enabled: yes
+    state: restarted
