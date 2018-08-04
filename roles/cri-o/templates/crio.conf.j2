@@ -212,8 +212,9 @@ image_volumes = "mkdir"
 # file.
 
 # insecure_registries is used to skip TLS verification when pulling images.
-# insecure_registries = [
-# ]
+insecure_registries = [
+  "{{ kube_service_addresses }}"
+]
 
 # registries is used to specify a comma separated list of registries to be used
 # when pulling an unqualified image (e.g. fedora:rawhide).

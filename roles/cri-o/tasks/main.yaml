@@ -16,8 +16,8 @@
   - cri-tools
 
 - name: Install cri-o config
-  copy:
-    src: crio.conf
+  template:
+    src: crio.conf.j2
     dest: /etc/crio/crio.conf
 
 - name: Install cri-o service
