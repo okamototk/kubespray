@@ -6,3 +6,6 @@ discoveryTokenAPIServers:
 - {{ kubeadm_discovery_address | replace("https://", "")}}
 discoveryTokenCACertHashes:
 - sha256:{{ kubeadm_ca_hash.stdout }}
+{% if manage_crio %}
+criSocket: /var/run/crio/crio.sock
+{% endif %}
