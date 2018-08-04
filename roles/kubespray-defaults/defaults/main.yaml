@@ -16,7 +16,7 @@ is_atomic: false
 disable_swap: false
 
 ## Change this to use another Kubernetes version, e.g. a current beta release
-kube_version: v1.10.4
+kube_version: v1.11.1
 
 ## Kube Proxy mode One of ['iptables','ipvs']
 kube_proxy_mode: iptables
@@ -134,6 +134,10 @@ kube_api_aggregator_routing: false
 # Docker options
 # Optionally do not run docker role
 manage_docker: true
+
+# cri-o options
+# Optionally run cri-o role
+manage_crio: false
 
 # Path used to store Docker data
 docker_daemon_graph: "/var/lib/docker"

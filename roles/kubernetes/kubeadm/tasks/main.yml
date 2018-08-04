@@ -43,6 +43,7 @@
     --config {{ kube_config_dir}}/kubeadm-client.conf
     --ignore-preflight-errors=all
   register: kubeadm_join
+  failed_when: "kubeadm_join.rc > 1"
   when: not is_kube_master and (kubeadm_client_conf.changed or not kubelet_conf.stat.exists)
 
 - name: Wait for kubelet bootstrap to create config

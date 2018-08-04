@@ -34,6 +34,7 @@
     - { role: kubespray-defaults}
     - { role: kubernetes/preinstall, tags: preinstall }
     - { role: docker, tags: docker, when: manage_docker|default(true) }
+    - { role: cri-o, tags: crio, when: manage_crio }
     - role: rkt
       tags: rkt
       when: "'rkt' in [etcd_deployment_type, kubelet_deployment_type, vault_deployment_type]"
@@ -51,7 +52,7 @@
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   roles:
     - { role: kubespray-defaults}
-    - { role: etcd, tags: etcd, etcd_cluster_setup: true, etcd_events_cluster_setup: "{{ etcd_events_cluster_enabled }}" }
+    - { role: etcd, tags: etcd, etcd_cluster_setup: true, etcd_events_cluster_setup: "{{ etcd_events_cluster_enabled }}", when: "not kubeadm_enabled" }
 
 - hosts: k8s-cluster:calico-rr
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"

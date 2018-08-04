@@ -19,7 +19,7 @@ kube_users_dir: "{{ kube_config_dir }}/users"
 kube_api_anonymous_auth: true
 
 ## Change this to use another Kubernetes version, e.g. a current beta release
-kube_version: v1.10.4
+kube_version: v1.11.1
 
 # Where the binaries will be downloaded.
 # Note: ensure that you've enough disk space (about 1G)
@@ -136,6 +136,14 @@ skydns_server: "{{ kube_service_addresses|ipaddr('net')|ipaddr(3)|ipaddr('addres
 skydns_server_secondary: "{{ kube_service_addresses|ipaddr('net')|ipaddr(4)|ipaddr('address') }}"
 dnsmasq_dns_server: "{{ kube_service_addresses|ipaddr('net')|ipaddr(2)|ipaddr('address') }}"
 dns_domain: "{{ cluster_name }}"
+
+# User docker as container runtime
+# If you set manage_crio true, set manage_docker false.
+manage_docker: true
+
+# Use cri-o as container runtime
+# If you set manage_docker true, set manage_crio false.
+manage_crio: false
 
 # Path used to store Docker data
 docker_daemon_graph: "/var/lib/docker"

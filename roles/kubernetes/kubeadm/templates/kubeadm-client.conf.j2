@@ -4,5 +4,8 @@ caCertPath: {{ kube_config_dir }}/ssl/ca.crt
 token: {{ kubeadm_token }}
 discoveryTokenAPIServers:
 - {{ kubeadm_discovery_address | replace("https://", "")}}
-DiscoveryTokenCACertHashes:
+discoveryTokenCACertHashes:
 - sha256:{{ kubeadm_ca_hash.stdout }}
+{% if manage_crio %}
+criSocket: /var/run/crio/crio.sock
+{% endif %}
