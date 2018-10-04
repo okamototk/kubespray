@@ -7,9 +7,11 @@ nodeRegistration:
 {% if kube_override_hostname|default('') %}
   name: {{ kube_override_hostname }}
 {% endif %}
+{% if standalone_kubelet|bool %}
   taints:
   - effect: NoSchedule
     key: node-role.kubernetes.io/master
+{% endif %}
 {% if container_manager == 'crio' %}
   criSocket: /var/run/crio/crio.sock
 {% else %}
@@ -19,6 +21,28 @@ nodeRegistration:
 apiVersion: kubeadm.k8s.io/v1alpha3
 kind: ClusterConfiguration
 etcd:
+{% if etcd_deployment_type == 'kubeadm' %}
+  local:
+    serverCertSANs:
+     - "{{ inventory_hostname }}"
+     - "{{ etcd_address }}"
+    peerCertSANs:
+     - "{{ inventory_hostname }}"
+     - "{{ etcd_address }}"
+    extraArgs:
+      initial-cluster: {% for item in groups['etcd'] %}{{ hostvars[item]['etcd_member_name'] }}=https://{{ hostvars[item]['ip'] }}:2380{% if not loop.last %},{% endif %}{% endfor %}
+
+{%if inventory_hostname == groups['etcd'][0] %}
+      initial-cluster-state: new
+{% else %}
+      initial-cluster-state: existing
+{% endif %}
+      name: "{{ etcd_member_name }}"
+      listen-peer-urls: https://{{ etcd_address }}:2380
+      listen-client-urls: https://{{ etcd_address }}:2379
+      advertise-client-urls: https://{{ etcd_address }}:2379
+      initial-advertise-peer-urls: https://{{ etcd_address }}:2380
+{% else %}
   external:
       endpoints:
 {% for endpoint in etcd_access_addresses.split(',') %}
@@ -27,6 +51,7 @@ etcd:
       caFile: {{ kube_config_dir }}/ssl/etcd/ca.pem
       certFile: {{ kube_config_dir }}/ssl/etcd/node-{{ inventory_hostname }}.pem
       keyFile: {{ kube_config_dir }}/ssl/etcd/node-{{ inventory_hostname }}-key.pem
+{% endif %}
 networking:
   dnsDomain: {{ dns_domain }}
   serviceSubnet: {{ kube_service_addresses }}
