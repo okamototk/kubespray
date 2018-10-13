@@ -1,0 +1,4 @@
+* certが存在すると、kubeadm initが失敗する
+* 既存のcertを利用する方法不明
+* etcdのHAの設定は下記の通りだが、etcdの起動方法が不明
+ * https://kubernetes.io/docs/setup/independent/setup-ha-etcd-with-kubeadm/
