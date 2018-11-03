@@ -24,11 +24,34 @@
     gpgcheck: no
   when: ansible_distribution in ["CentOS","RedHat"] and not is_atomic
 
+- name: Add Project Atomic packages PPA key
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: 018BA5AD9DF57A4448F0E6CF8BECF1637AD8C79D
+  when: ansible_distribution in ["Ubuntu"] and not is_atomic
+
+- name: Add Project Atomic packages PPA
+  apt_repository:
+    repo: deb http://ppa.launchpad.net/projectatomic/ppa/ubuntu xenial main
+    state: present
+  when: ansible_distribution in ["Ubuntu"] and not is_atomic
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+  when: ansible_distribution in ["Ubuntu"] and not is_atomic
+
 - name: Install cri-o packages
   package:
     name: "{{ item }}"
     state: present
   with_items: "{{ crio_packages }}"
+
+- name: Install cri-o service
+  template:
+    src: crio.service.j2
+    dest: /lib/systemd/system/crio.service
+  when: ansible_distribution in ["Ubuntu"] and not is_atomic
 
 - name: Install cri-o config
   template:

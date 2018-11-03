@@ -1,0 +1,7 @@
+---
+crio_packages:
+  - cri-o-1.12
+
+crio_service: crio
+
+crio_runc: /usr/lib/cri-o-runc/sbin/runc
