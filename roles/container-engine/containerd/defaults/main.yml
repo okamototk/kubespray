@@ -1,0 +1,11 @@
+---
+containerd_version: 1.2.6
+containerd_download_url: https://github.com/containerd/containerd/releases/download/v{{ containerd_version }}/containerd-{{ containerd_version }}.linux-{{ host_architecture }}.tar.gz
+containerd_service_src: https://raw.githubusercontent.com/containerd/cri/master/contrib/systemd-units/containerd.service
+containerd_service_dir: /lib/systemd/system/
+containerd_sock: /var/run/containerd/containerd.sock
+crictl_version: 1.14.0
+crictl_download_url: https://github.com/kubernetes-sigs/cri-tools/releases/download/v{{ crictl_version }}/crictl-v{{ crictl_version }}-linux-{{ host_architecture }}.tar.gz
+runc_version: 1.0.0-rc8
+runc_download_url: https://github.com/opencontainers/runc/releases/download/v{{ runc_version }}/runc.amd64
+kubelet_cgroup_driver: systemd

@@ -16,6 +16,10 @@ nodeRegistration:
 {% endif %}
 {% if container_manager == 'crio' %}
   criSocket: /var/run/crio/crio.sock
+{% elif container_manager == 'rkt' %}
+  criSocket: /var/run/rkt.sock
+{% elif container_manager == 'containerd' %}
+  criSocket: /var/run/containerd/containerd.sock
 {% else %}
   criSocket: /var/run/dockershim.sock
 {% endif %}
