@@ -7,6 +7,20 @@ dependencies:
       - container-engine
       - crio
 
+  - role: container-engine/rkt
+    when:
+      - container_manager == 'rkt'
+    tags:
+      - container-engine
+      - rkt
+
+  - role: container-engine/containerd
+    when:
+      - container_manager == 'containerd'
+    tags:
+      - container-engine
+      - containerd
+
   - role: container-engine/docker
     when:
       - container_manager == 'docker'
