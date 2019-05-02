@@ -7,12 +7,12 @@ dependencies:
       - container-engine
       - crio
 
-  - role: container-engine/rkt
-    when:
-      - container_manager == 'rkt'
-    tags:
-      - container-engine
-      - rkt
+#  - role: container-engine/rkt
+#    when:
+#      - container_manager == 'rkt'
+#    tags:
+#      - container-engine
+#      - rkt
 
   - role: container-engine/containerd
     when:

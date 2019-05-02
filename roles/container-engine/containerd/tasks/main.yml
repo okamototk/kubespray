@@ -1,10 +1,26 @@
 ---
-- name: Download and unarchive containerd
-  unarchive:
-    src: "{{ containerd_download_url }}"
-    dest: /usr/local
-    remote_src: yes
+- name: Install Docker
+  include_role:
+    name: container-engine/docker
 
+- name: Install config.toml
+  template:
+    src: config.toml.j2
+    dest: /etc/containerd/config.toml
+    owner: bin
+    mode: 0644
+
+- name: Stop and disabled Docker
+  systemd:
+    name: docker
+    state: stopped
+    enabled: no
+
+- name: Restart containerd
+  systemd:
+    name: containerd
+    state: restarted
+    
 - name: Download and unarchive crictl
   unarchive:
     src: "{{ crictl_download_url }}"
@@ -21,21 +37,6 @@
 - name: Install crictl completion
   shell: /usr/local/bin/crictl completion >/etc/bash_completion.d/crictl
   ignore_errors: True
+  when: ansible_distribution in ["CentOS","RedHat", "Ubuntu", "Debian"]
 
-- name: Download containerd.service
-  get_url:
-    url: "{{ containerd_service_src }}"
-    dest: "{{ containerd_service_dir }}"
 
-- name: Enable containerd
-  systemd:
-    name: containerd.service
-    state: started
-    enabled: yes
-    daemon-reload: yes
-
-- name: Install runc
-  get_url:
-    url: "{{ runc_download_url }}"
-    dest: /usr/local/bin/runc
-    mode: 0755
